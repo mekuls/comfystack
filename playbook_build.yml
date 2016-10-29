@@ -1,0 +1,12 @@
+---
+- hosts: vstack
+  become: True
+  roles:
+    - { role: swapfile,
+        swapfile_size: 1024MB }
+    - { role: ansible-role-mysql,
+        mysql_users: [{
+          name: 'vstack_user',
+          password: 'DV2JLlizYu7pbktu01Qi',
+          priv: 'firstfolio_wp.*:ALL',
+          host: "{{ hostvars['wordpress-dev-1'].ansible_ssh_host }}" }] }
