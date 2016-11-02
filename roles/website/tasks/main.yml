@@ -37,11 +37,22 @@
   notify:
     - nginx | reload nginx
 
-- name: nginx | copying website configuration
-  template: src=templates/default.conf dest=/etc/nginx/conf.d/default.conf
-- name: nginx | start nginx
-  service: name=nginx state=started
+- name: setting up templates
+  template: src=templates/{{ item }} dest={{ item }}
+  with_items:
+    - /etc/nginx/conf.d/php.conf
+    - /etc/nginx/sites-available/vstack.conf
+
+- name: nginx | symlinking sites-available
+  file:
+    src: "/etc/nginx/sites-available/{{item}}"
+    dest: "/etc/nginx/sites-enabled/{{item}}"
+    state: link
+  with_items:
+    - vstack.conf 
   become: True
+  notify:
+    - nginx | reload nginx
 
 - name: installing php5-fpm
   apt: pkg=php5-fpm
@@ -51,15 +62,27 @@
   notify:
     - "php5-fpm | reload"
 
-- name: ask php5-fpm to listen on port rather than socket
-  replace:
-      dest: /etc/php5/fpm/pool.d/www.conf
-      regexp:  listen = /var/run/php5-fpm.sock
+- name: copying php5-fpm default pool template
+  template: 
+    src: templates/etc/php5/fpm/pool.d/www.conf
+    dest: /etc/php5/fpm/pool.d/www.conf
+  notify:
+    - "php5-fpm | reload"
+
+- name: installing php5 modules
+  apt: pkg={{ item }}
+  with_items:
+    - php5-mysql
+    - php5-curl
+  notify:
+    - php5-fpm | reload
+    - nginx | reload nginx
+
 - name: setting environment variables
   lineinfile:
     dest: "/etc/php5/fpm/pool.d/www.conf"
-    regexp: "^env[VSTACK_VAR]"
-    line: "env[VSTACK_VAR] = echoice-web"
+    regexp: "^env[VSTACK_DBHOST]"
+    line: "env[VSTACK_DBHOST] = {{vstack_dbhost}}"
     state: "present"
   notify:
     - "php5-fpm | restart"

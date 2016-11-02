@@ -6,6 +6,11 @@ services:
       dockerfile: /Dockerfile_php
     volumes:
        - ~/code/vstack/app:/code
+    environment:
+        VSTACK_DBHOST: '10.222.1.2'
+        VSTACK_DBUSER: 'vstack_user'
+        VSTACK_PASSWORD: 'DV2JLlizYu7pbktu01Qi'
+        VSTACK_DBNAME: 'vstack_db'
   web:
     image: nginx
     restart: always

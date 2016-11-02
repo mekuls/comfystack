@@ -7,14 +7,14 @@
         swapfile_size: 1024MB }
     - { role: ansible-role-mysql,
         mysql_databases: [{
-            name: 'vstack_db',
+            name: '{{vstack_dbname}}',
             collation: 'utf8_general_ci',
             encoding: 'utf8'
         }],
         mysql_users: [{
-          name: 'vstack_user',
-          password: 'DV2JLlizYu7pbktu01Qi',
-          priv: 'vstack_db.*:ALL',
+          name: '{{vstack_dbuser}}',
+          password: '{{vstack_dbpassword}}',
+          priv: '{{vstack_dbname}}.*:ALL',
           host: "%" }] 
       }
     - { role: website,
