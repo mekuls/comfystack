@@ -11,11 +11,18 @@
             collation: 'utf8_general_ci',
             encoding: 'utf8'
         }],
-        mysql_users: [{
-          name: '{{vstack_dbuser}}',
-          password: '{{vstack_dbpassword}}',
-          priv: '{{vstack_dbname}}.*:ALL',
-          host: "%" }] 
+        mysql_users: [
+        {
+          name: 'vstack_user',
+          password: 'DV2JLlizYu7pbktu01Qi',
+          priv: 'vstack_db.*:ALL',
+          host: "%" },
+        {
+          name: 'vstack_user',
+          password: 'DV2JLlizYu7pbktu01Qi',
+          priv: 'vstack_db.*:ALL',
+          host: "localhost" }],
+         tags: ['mysql']
       }
     - { role: website,
         tags: "website" }

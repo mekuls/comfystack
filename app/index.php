@@ -1,5 +1,5 @@
 <?php
-$servername = "10.222.1.2";
+$servername = "127.0.0.1";
 $username = "vstack_user";
 $password = "DV2JLlizYu7pbktu01Qi";
 

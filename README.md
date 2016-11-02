@@ -30,7 +30,6 @@ On my workstation I use a plugin called *vagrant-notify-forwarder* to propogate 
 
 ##Todo:
 ---
-* Fix nginx serving issue
 * Insert data into the db on build as a seed
 * Commit and tag
 
@@ -38,3 +37,5 @@ On my workstation I use a plugin called *vagrant-notify-forwarder* to propogate 
 * Fix mysql apt-get update call where mysql isn't already installed
 
 ##Done:
+
+* Fix nginx serving issue

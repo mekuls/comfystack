@@ -1,7 +1,2 @@
-
+---
 website_path: '/var/www'
-vstack_dbhost: '10.222.1.2'
-vstack_dbuser: 'vstack_user'
-vstack_password: 'DV2JLlizYu7pbktu01Qi'
-vstack_dbname: 'vstack_db'
-
