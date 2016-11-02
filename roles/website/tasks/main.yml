@@ -1,0 +1,66 @@
+- name: nginx | install nginx
+  apt: pkg=nginx
+  become: True
+
+- name: create website directory
+  file: 
+    path: "{{website_path}}"
+    state: directory 
+    owner: www-data 
+    group: www-data 
+    mode: 777
+
+- name: git pull latest version of code
+  git: 
+    repo: https://github.com/mekuls/vstack.git 
+    dest: "{{website_path}}" 
+
+- name: Ensure everything is chowned to www-data
+  shell: "chown -R www-data:www-data {{website_path}}"
+
+- name: Ensure directories are 0755
+  command: find {{ website_path }} -type d -exec chmod -c 0755 {} \;
+  register: chmod_result
+  changed_when: "chmod_result.stdout != \"\""
+
+- name: Ensure files are 0644
+  command: find {{ website_path }} -type f -exec chmod -c 0644 {} \;
+  register: chmod_result
+  changed_when: "chmod_result.stdout != \"\""
+
+- name: nginx | remove default configurations
+  file: path={{item.src}} state=absent
+  with_items:
+    - { src: '/etc/nginx/sites-enabled/default' }
+    - { src: '/etc/nginx/sites-available/default' }
+  become: True
+  notify:
+    - nginx | reload nginx
+
+- name: nginx | copying website configuration
+  template: src=templates/default.conf dest=/etc/nginx/conf.d/default.conf
+- name: nginx | start nginx
+  service: name=nginx state=started
+  become: True
+
+- name: installing php5-fpm
+  apt: pkg=php5-fpm
+
+- name: securing php5-fpm
+  replace: dest=/etc/php5/fpm/php.ini regexp=^;cgi.fix_pathinfo=1 replace=cgi.fix_pathinfo=0
+  notify:
+    - "php5-fpm | reload"
+
+- name: ask php5-fpm to listen on port rather than socket
+  replace:
+      dest: /etc/php5/fpm/pool.d/www.conf
+      regexp:  listen = /var/run/php5-fpm.sock
+- name: setting environment variables
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    regexp: "^env[VSTACK_VAR]"
+    line: "env[VSTACK_VAR] = echoice-web"
+    state: "present"
+  notify:
+    - "php5-fpm | restart"
+
