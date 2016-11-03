@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.define "vstack" do |vm_config|
-    vm_config.vm.box = "ubuntu/trusty64"
+    vm_config.vm.box = "ubuntu/zesty64"
     vm_config.vm.provider "virtualbox" do |vb|
         vb.memory = "512"
     end

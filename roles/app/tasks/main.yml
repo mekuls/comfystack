@@ -1,0 +1,31 @@
+---
+- name: copy index.php file
+  copy: 
+    src: ../../../app/index.php 
+    dest: "{{website_path}}index.php" 
+    owner: www-data 
+    group: www-data
+
+- name: copy schema.sql file
+  copy: 
+    src: ../../../app/schema.sql 
+    dest: "{{website_path}}schema.sql" 
+    owner: www-data 
+    group: www-data
+
+- name: Ensure everything is chowned to www-data
+  shell: "chown -R www-data:www-data {{website_path}}"
+
+- name: Ensure directories are 0755
+  command: find {{ website_path }} -type d -exec chmod -c 0755 {} \;
+  register: chmod_result
+  changed_when: "chmod_result.stdout != \"\""
+
+- name: Ensure files are 0644
+  command: find {{ website_path }} -type f -exec chmod -c 0644 {} \;
+  register: chmod_result
+  changed_when: "chmod_result.stdout != \"\""
+
+- name: run schema.sql file
+  shell: >
+    mysql -u root -NB vstack_db <  {{website_path}}schema.sql

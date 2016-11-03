@@ -1,5 +1,4 @@
-DROP TABLE items;
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
 	Id int NOT NULL,
 	Content VARCHAR(1024) CHARSET utf8
 );
