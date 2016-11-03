@@ -21,7 +21,7 @@ docker-compose down
 
 The Docker implementation can be accessed within the browser at http://localhost:8080
 
-##The standalone deployment
+##The standalone deployment [10.222.1.2](http://10.222.1.2/)
 
 To spin up the standalone deployment run:
 
