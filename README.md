@@ -19,6 +19,29 @@ vagrant destroy --force
 docker-compose down
 ```
 
+The Docker implementation can be accessed within the browser at http://localhost:8080
+
+##The standalone deployment
+
+To spin up the standalone deployment run:
+
+```
+vagrant up
+```
+
+To reload configuration and website files run:
+
+```
+vagrant provision
+```
+
+To spin down the standalone deployment run:
+
+```
+vagrant destroy --force
+```
+
+*Note: Destroying the standalone deployment will result in the database being destroyed which will make the docker environment unusable*
 
 ##Some Notes:
 

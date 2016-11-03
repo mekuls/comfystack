@@ -1,7 +1,8 @@
 <?php
-$servername = "127.0.0.1";
-$username = "vstack_user";
-$password = "DV2JLlizYu7pbktu01Qi";
+$servername = getenv('VSTACK_DBHOST');
+$username = getenv("VSTACK_DBUSER");
+$password = getenv("VSTACK_PASSWORD");
+$dbname = getenv("VSTACK_DBNAME");
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
@@ -11,7 +12,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM vstack_db.items";
+$sql = "SELECT * FROM " . $dbname . ".items"; // This is a very bad idea
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
