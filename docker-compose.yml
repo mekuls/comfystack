@@ -5,7 +5,7 @@ services:
       context: ./docker
       dockerfile: /Dockerfile_php
     volumes:
-       - ~/code/vstack/app:/code
+      - ./app:/code/:ro
     environment:
         VSTACK_DBHOST: '10.222.1.2'
         VSTACK_DBUSER: 'vstack_user'
@@ -15,8 +15,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ~/code/vstack/app:/code
-      - ~/code/vstack/docker/config/nginx_default.conf:/etc/nginx/conf.d/default.conf
+      - ./app:/code/:ro
+      - ./docker/config/nginx_default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "8080:80"
     environment:
